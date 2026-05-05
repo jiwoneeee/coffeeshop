@@ -1,5 +1,6 @@
 package com.example.coffeeshop.domain.order.service;
 
+import com.example.coffeeshop.common.annotation.DistributedLock;
 import com.example.coffeeshop.common.exception.ErrorCode;
 import com.example.coffeeshop.common.exception.ServiceException;
 import com.example.coffeeshop.domain.member.entity.Member;
@@ -30,8 +31,8 @@ import java.util.List;
 @Slf4j
 public class OrderService {
     private final PointService pointService;
-    private final MenuService menuService;
     private final MenuRankingService menuRankingService;
+    private final StockService stockService;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
@@ -46,14 +47,7 @@ public class OrderService {
         long totalPrice = 0L;
 
         for (OrderItemDto item : request.items()) {
-            Menu menu = menuService.findById(item.menuId());
-
-            // 메뉴 상태 확인
-            if (menu.getStatus() != MenuStatus.AVAILABLE) {
-                throw new ServiceException(ErrorCode.INVALID_STATUS, "주문할 수 없는 메뉴입니다: " + menu.getName());
-            }
-
-            menu.minusStock(item.quantity());
+            Menu menu = stockService.decrease(item.menuId(), item.quantity());
 
             orderItemRepository.save(
                     new OrderItem(order.getId(), menu.getId(), item.quantity(), menu.getPrice())
@@ -88,7 +82,12 @@ public class OrderService {
     @Transactional
     public void cancel(Long orderId) {
         Order order = findById(orderId);
-        restoreByOrderId(orderId);
+
+        List<OrderItem> items = orderItemRepository.findAllByOrderId(orderId);
+        items.forEach(item ->
+                stockService.restore(item.getMenuId(), item.getQuantity())
+        );
+
         order.cancelled(CancelReason.USER_CANCEL);
     }
 
@@ -96,14 +95,5 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow(
                 () -> new ServiceException(ErrorCode.ORDER_NOT_FOUND)
         );
-    }
-
-    public void restoreByOrderId(Long orderId){
-        List<OrderItem> items = orderItemRepository.findAllByOrderId(orderId);
-
-        items.forEach(item -> {
-            Menu menu = menuService.findById(item.getMenuId());
-            menu.restoreStock(item.getQuantity());
-        });
     }
 }

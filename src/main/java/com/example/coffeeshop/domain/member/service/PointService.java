@@ -1,5 +1,6 @@
 package com.example.coffeeshop.domain.member.service;
 
+import com.example.coffeeshop.common.annotation.DistributedLock;
 import com.example.coffeeshop.common.exception.ErrorCode;
 import com.example.coffeeshop.common.exception.ServiceException;
 import com.example.coffeeshop.domain.member.entity.Member;
@@ -22,6 +23,7 @@ public class PointService {
     private final MemberRepository memberRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
+    @DistributedLock(key = "'point:' + #memberId")
     public ChargePointResponse charge(Long memberId, ChargePointRequest request) {
         Member member = getMember(memberId);
 
@@ -50,6 +52,7 @@ public class PointService {
         return ChargePointResponse.of(member, request.point());
     }
 
+    @DistributedLock(key = "'point:' + #memberId")
     public void use(Long memberId, Long amount){
         Member member = getMember(memberId);
         member.usePoint(amount);
@@ -57,6 +60,7 @@ public class PointService {
                 new PointHistory(memberId, amount, member.getPoint(), PointType.USE));
     }
 
+    @DistributedLock(key = "'point:' + #memberId")
     public void earn(Long memberId, Long amount){
         Member member = getMember(memberId);
 

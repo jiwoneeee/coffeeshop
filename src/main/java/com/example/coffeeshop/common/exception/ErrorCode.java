@@ -22,9 +22,9 @@ public enum ErrorCode {
 
     INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "C001", "유효하지 않은 카테고리"),
     MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "M003" , "존재하지 않는 메뉴"),
-    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "O001" , "존재하지 않는 주문")
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "O001" , "존재하지 않는 주문"),
 
-    ;
+    LOCK_ACQUISITION_FAILED(HttpStatus.CONFLICT, "L001", "무언가... Lock 에 걸림");
     private final HttpStatus status;
     private final String code;
     private final String message;
