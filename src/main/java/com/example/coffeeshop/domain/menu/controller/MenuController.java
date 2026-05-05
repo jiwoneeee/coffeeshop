@@ -28,17 +28,8 @@ public class MenuController {
             @RequestParam(required = false) String keyword,
             Pageable pageable){
 
-        Category parsedCategory = null;
-        if (category != null) {
-            try {
-                parsedCategory = Category.valueOf(category.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new ServiceException(ErrorCode.INVALID_CATEGORY, "유효하지 않은 카테고리입니다: " + category);
-            }
-        }
-
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApiResponse.success(menuService.getAll(parsedCategory, keyword, pageable)));
+                .body(ApiResponse.success(menuService.getAll(Category.from(category), keyword, pageable)));
     }
 }
