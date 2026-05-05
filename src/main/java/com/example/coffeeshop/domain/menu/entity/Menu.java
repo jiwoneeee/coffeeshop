@@ -1,4 +1,4 @@
-package com.example.coffeeshop.domain.menu;
+package com.example.coffeeshop.domain.menu.entity;
 
 import com.example.coffeeshop.common.exception.ErrorCode;
 import com.example.coffeeshop.common.exception.ServiceException;

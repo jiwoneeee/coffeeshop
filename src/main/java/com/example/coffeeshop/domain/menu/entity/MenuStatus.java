@@ -1,4 +1,4 @@
-package com.example.coffeeshop.domain.menu;
+package com.example.coffeeshop.domain.menu.entity;
 
 public enum MenuStatus {
     AVAILABLE, SOLD_OUT, DELETED

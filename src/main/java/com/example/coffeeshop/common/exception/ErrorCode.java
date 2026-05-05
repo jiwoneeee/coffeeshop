@@ -18,7 +18,9 @@ public enum ErrorCode {
 
     INVALID_STATUS(HttpStatus.BAD_REQUEST, "S001", "유효하지 않은 상태"),
 
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "U001", "존재하지 않는 멤버");
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "U001", "존재하지 않는 멤버"),
+
+    INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "C001", "유효하지 않은 카테고리");
 
 
     private final HttpStatus status;
