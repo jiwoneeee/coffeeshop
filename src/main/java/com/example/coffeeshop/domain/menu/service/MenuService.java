@@ -30,11 +30,15 @@ public class MenuService {
     public List<RankingMenuDto> getTop3() {
         return menuRankingService.findTop3Today().stream()
                 .map(ranking -> {
-                    Menu menu = menuRepository.findById(Long.parseLong(ranking.getTitle()))
-                            .orElseThrow(() -> new ServiceException(ErrorCode.MENU_NOT_FOUND));
+                    Menu menu = findById(Long.parseLong(ranking.getTitle()));
                     return RankingMenuDto.of(menu, ranking.getScore());
                 })
                 .toList();
+    }
+
+    public Menu findById(Long menuId){
+        return menuRepository.findById(menuId)
+                .orElseThrow(() -> new ServiceException(ErrorCode.MENU_NOT_FOUND));
     }
 
 }

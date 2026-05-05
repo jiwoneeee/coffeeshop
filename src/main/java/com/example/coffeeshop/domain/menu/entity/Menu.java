@@ -51,8 +51,14 @@ public class Menu {
     }
 
     public void minusStock(Integer amount){
+        if (this.stock == null) return;
         if (amount <= 0) throw new ServiceException(ErrorCode.OUT_OF_STOCK, "차감 재고의 입력값은 0 보다 커야 합니다.");
-        if ((this.stock - amount) < 0) throw new ServiceException(ErrorCode.OUT_OF_STOCK, "재고가 부족합니다.");
+        if (this.stock < amount) throw new ServiceException(ErrorCode.OUT_OF_STOCK, "재고가 부족합니다: "+this.stock);
         this.stock -= amount;
+    }
+
+    public void restoreStock(Integer amount){
+        if (this.stock == null) return;
+        this.stock += amount;
     }
 }

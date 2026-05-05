@@ -1,4 +1,4 @@
-package com.example.coffeeshop.domain.order;
+package com.example.coffeeshop.domain.order.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package com.example.coffeeshop.domain.order;
+package com.example.coffeeshop.domain.order.entity;
 
 import com.example.coffeeshop.common.exception.ErrorCode;
 import com.example.coffeeshop.common.exception.ServiceException;
@@ -36,9 +36,9 @@ public class Order {
 
     private CancelReason cancelReason;
 
-    public Order(Long memberId, Long totalPrice) {
+    public Order(Long memberId) {
         this.memberId = memberId;
-        this.totalPrice = totalPrice;
+        this.totalPrice = 0L;
         this.status = OrderStatus.PENDING;
         this.orderedAt = LocalDateTime.now();
     }
@@ -54,5 +54,9 @@ public class Order {
         this.status = OrderStatus.CANCELLED;
         this.cancelReason = cancelReason;
         this.cancelledAt = LocalDateTime.now();
+    }
+
+    public void updateTotalPrice(long totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
