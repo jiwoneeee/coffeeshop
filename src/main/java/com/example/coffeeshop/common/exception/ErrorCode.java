@@ -20,7 +20,8 @@ public enum ErrorCode {
 
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "U001", "존재하지 않는 멤버"),
 
-    INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "C001", "유효하지 않은 카테고리");
+    INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "C001", "유효하지 않은 카테고리"),
+    MENU_NOT_FOUND(HttpStatus.NOT_FOUND, "M003" , "존재하지 않는 메뉴");
 
 
     private final HttpStatus status;
