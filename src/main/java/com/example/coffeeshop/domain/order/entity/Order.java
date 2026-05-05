@@ -26,6 +26,7 @@ public class Order {
 
     private Long totalPrice;
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     private LocalDateTime orderedAt;
@@ -34,6 +35,7 @@ public class Order {
 
     private LocalDateTime cancelledAt;
 
+    @Enumerated(EnumType.STRING)
     private CancelReason cancelReason;
 
     public Order(Long memberId) {

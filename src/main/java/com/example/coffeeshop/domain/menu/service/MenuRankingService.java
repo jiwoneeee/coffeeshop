@@ -20,10 +20,10 @@ public class MenuRankingService {
 
     public static final String MENU_RANKING_DAILY_KEY = "menu:ranking:";
 
-    public void count(Long menuId, LocalDate today) {
+    public void count(Long menuId, Integer quantity, LocalDate today) {
         String key = MENU_RANKING_DAILY_KEY + today.toString();
 
-        stringRedisTemplate.opsForZSet().incrementScore(key, String.valueOf(menuId), 1);
+        stringRedisTemplate.opsForZSet().incrementScore(key, String.valueOf(menuId), quantity);
     }
 
     public List<RankingDto> findTop3Today(){

@@ -23,12 +23,14 @@ public class Menu {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     private Long price;
 
     private Integer stock;
 
+    @Enumerated(EnumType.STRING)
     private MenuStatus status;
 
     private LocalDateTime createdAt;
@@ -48,6 +50,8 @@ public class Menu {
     public void fillStock(Integer amount){
         if (amount <= 0) throw new ServiceException(ErrorCode.OUT_OF_STOCK, "충전 재고의 입력값은 0 보다 커야 합니다.");
         this.stock += amount;
+
+        if (this.stock >= 0) this.status = MenuStatus.AVAILABLE;
     }
 
     public void minusStock(Integer amount){
@@ -55,10 +59,14 @@ public class Menu {
         if (amount <= 0) throw new ServiceException(ErrorCode.OUT_OF_STOCK, "차감 재고의 입력값은 0 보다 커야 합니다.");
         if (this.stock < amount) throw new ServiceException(ErrorCode.OUT_OF_STOCK, "재고가 부족합니다: "+this.stock);
         this.stock -= amount;
+
+        if (this.stock == 0) this.status = MenuStatus.SOLD_OUT;
     }
 
     public void restoreStock(Integer amount){
         if (this.stock == null) return;
         this.stock += amount;
+
+        if (this.stock >= 0) this.status = MenuStatus.AVAILABLE;
     }
 }

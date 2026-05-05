@@ -34,10 +34,14 @@ public class OrderService {
     private final MenuRankingService menuRankingService;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public CreateOrderResponse order(CreateOrderRequest request) {
-        Order order = orderRepository.save(new Order(request.userId()));
+        Member member = memberRepository.findById(request.memberId()).orElseThrow(
+                ()-> new ServiceException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+        Order order = orderRepository.save(new Order(request.memberId()));
 
         long totalPrice = 0L;
 
@@ -58,6 +62,10 @@ public class OrderService {
             totalPrice += menu.getPrice() * item.quantity();
         }
 
+        if (member.getPoint() < totalPrice) {
+            throw new ServiceException(ErrorCode.SHORT_POINT, "잔액이 부족합니다. 현재 잔액: "+member.getPoint());
+        }
+
         order.updateTotalPrice(totalPrice);
         return CreateOrderResponse.from(order);
     }
@@ -71,7 +79,7 @@ public class OrderService {
 
         List<OrderItem> items = orderItemRepository.findAllByOrderId(orderId);
         items.forEach(item ->
-                menuRankingService.count(item.getMenuId(), LocalDate.now())
+                menuRankingService.count(item.getMenuId(), item.getQuantity(), LocalDate.now())
         );
 
         order.paid();

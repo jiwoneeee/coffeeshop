@@ -10,7 +10,7 @@ public record CreateOrderResponse(
 ) {
     public static CreateOrderResponse from(Order order){
         return new CreateOrderResponse(
-                order.getMemberId(),
+                order.getId(),
                 order.getMemberId(),
                 order.getTotalPrice()
         );

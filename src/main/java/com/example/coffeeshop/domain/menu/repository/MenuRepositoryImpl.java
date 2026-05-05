@@ -25,7 +25,9 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom{
                         menu.id,
                         menu.name,
                         menu.category,
-                        menu.price
+                        menu.price,
+                        menu.stock,
+                        menu.status
                 ))
                 .from(menu)
                 .where(
@@ -35,7 +37,7 @@ public class MenuRepositoryImpl implements MenuRepositoryCustom{
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(menu.price.asc())
+                .orderBy(menu.name.asc())
                 .fetch();
 
     }

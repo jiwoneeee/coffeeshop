@@ -23,6 +23,7 @@ public class PointHistory {
 
     private Long afterPoint;
 
+    @Enumerated(EnumType.STRING)
     private PointType type;
 
     private LocalDateTime createdAt;
