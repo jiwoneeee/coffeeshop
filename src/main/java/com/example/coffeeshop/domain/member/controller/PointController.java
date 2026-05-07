@@ -2,9 +2,9 @@ package com.example.coffeeshop.domain.member.controller;
 
 import com.example.coffeeshop.common.dto.ApiResponse;
 import com.example.coffeeshop.domain.member.dto.MemberDto;
-import com.example.coffeeshop.domain.member.service.MemberService;
 import com.example.coffeeshop.domain.member.dto.ChargePointRequest;
 import com.example.coffeeshop.domain.member.dto.ChargePointResponse;
+import com.example.coffeeshop.domain.member.service.PointLockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/points")
 public class PointController {
 
-    private final MemberService memberService;
+    private final PointLockService pointService;
 
     // 포인트 충전
     @PostMapping("/charge/{memberId}")
@@ -26,7 +26,7 @@ public class PointController {
             @RequestBody ChargePointRequest request){
         return ResponseEntity.
                 status(HttpStatus.OK).
-                body(ApiResponse.success(memberService.charge(memberId, request)));
+                body(ApiResponse.success(pointService.charge(memberId, request)));
     }
 
     @GetMapping("/{memberId}")
@@ -34,7 +34,7 @@ public class PointController {
             @PathVariable Long memberId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApiResponse.success(memberService.getMemberDto(memberId)));
+                .body(ApiResponse.success(pointService.getMemberDto(memberId)));
     }
 
 }

@@ -4,7 +4,7 @@ import com.example.coffeeshop.common.exception.ErrorCode;
 import com.example.coffeeshop.common.exception.ServiceException;
 import com.example.coffeeshop.domain.member.entity.Member;
 import com.example.coffeeshop.domain.member.repository.MemberRepository;
-import com.example.coffeeshop.domain.member.service.MemberService;
+import com.example.coffeeshop.domain.member.service.PointLockService;
 import com.example.coffeeshop.domain.menu.entity.Menu;
 import com.example.coffeeshop.domain.menu.service.MenuRankingService;
 import com.example.coffeeshop.domain.order.dto.CreateOrderRequest;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderService {
-    private final MemberService memberService;
+    private final PointLockService pointService;
     private final MenuRankingService menuRankingService;
     private final StockLockService stockService;
     private final OrderRepository orderRepository;
@@ -66,8 +66,8 @@ public class OrderService {
     public void pay(Long orderId) {
         Order order = findById(orderId);
 
-        memberService.use(order.getMemberId(), order.getTotalPrice());
-        memberService.earn(order.getMemberId(), order.getTotalPrice());
+        pointService.usePoint(order.getMemberId(), order.getTotalPrice());
+        pointService.earnPoint(order.getMemberId(), order.getTotalPrice());
 
         List<OrderItem> items = orderItemRepository.findAllByOrderId(orderId);
         items.forEach(item ->
