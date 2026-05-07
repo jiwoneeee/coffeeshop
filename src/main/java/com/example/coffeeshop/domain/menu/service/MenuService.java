@@ -11,12 +11,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuRankingService menuRankingService;
@@ -41,4 +43,7 @@ public class MenuService {
                 .orElseThrow(() -> new ServiceException(ErrorCode.MENU_NOT_FOUND));
     }
 
+    public MenuDto getOne(Long menuId) {
+        return MenuDto.from(findById(menuId));
+    }
 }
