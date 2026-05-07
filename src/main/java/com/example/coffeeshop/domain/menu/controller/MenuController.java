@@ -35,6 +35,12 @@ public class MenuController {
                 .body(ApiResponse.success(menuService.getAll(Category.from(category), keyword, pageable)));
     }
 
+    @GetMapping("/{menuId}")
+    public ResponseEntity<ApiResponse<MenuDto>> getOne(@PathVariable Long menuId){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(menuService.getOne(menuId)));
+    }
+
     @GetMapping("/popular")
     public ResponseEntity<ApiResponse<List<RankingMenuDto>>> getTop3() {
         return ResponseEntity
