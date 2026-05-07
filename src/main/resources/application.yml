@@ -5,16 +5,18 @@ spring:
     password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 70
+      maximum-pool-size: 40
       connection-timeout: 50000
+      leak-detection-threshold: 5000
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         default_batch_fetch_size: 100
+        show_sql: false
     defer-datasource-initialization: true
   data:
     redis:
