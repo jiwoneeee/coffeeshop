@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class PointService {
+public class MemberService {
     private static final long EARN_RATE_PERCENT = 10;
 
     private final MemberRepository memberRepository;
