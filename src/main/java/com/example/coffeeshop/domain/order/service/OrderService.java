@@ -1,15 +1,12 @@
 package com.example.coffeeshop.domain.order.service;
 
-import com.example.coffeeshop.common.annotation.DistributedLock;
 import com.example.coffeeshop.common.exception.ErrorCode;
 import com.example.coffeeshop.common.exception.ServiceException;
 import com.example.coffeeshop.domain.member.entity.Member;
 import com.example.coffeeshop.domain.member.repository.MemberRepository;
 import com.example.coffeeshop.domain.member.service.PointService;
 import com.example.coffeeshop.domain.menu.entity.Menu;
-import com.example.coffeeshop.domain.menu.entity.MenuStatus;
 import com.example.coffeeshop.domain.menu.service.MenuRankingService;
-import com.example.coffeeshop.domain.menu.service.MenuService;
 import com.example.coffeeshop.domain.order.dto.CreateOrderRequest;
 import com.example.coffeeshop.domain.order.dto.CreateOrderResponse;
 import com.example.coffeeshop.domain.order.dto.OrderItemDto;
@@ -32,7 +29,7 @@ import java.util.List;
 public class OrderService {
     private final PointService pointService;
     private final MenuRankingService menuRankingService;
-    private final StockService stockService;
+    private final StockLockService stockService;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
@@ -54,6 +51,7 @@ public class OrderService {
             );
 
             totalPrice += menu.getPrice() * item.quantity();
+            log.info("[OrderService] totalPrice: {}", totalPrice);
         }
 
         if (member.getPoint() < totalPrice) {

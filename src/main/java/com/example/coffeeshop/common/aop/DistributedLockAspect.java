@@ -11,6 +11,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -31,14 +33,22 @@ public class DistributedLockAspect {
         String key = resolveKey(distributedLock.key(), joinPoint);
         RLock lock = redissonClient.getLock("lock:" + key);
 
+        log.info("락 시도: key={}", "lock:" + key);
+
         boolean acquired = false;
         try {
-            acquired = lock.tryLock(
-                    distributedLock.waitTime(),
-                    distributedLock.leaseTime(),
-                    distributedLock.timeUnit()
-            );
-
+            if (distributedLock.leaseTime() == -1) {
+                acquired = lock.tryLock(
+                        distributedLock.waitTime(),
+                        distributedLock.timeUnit()
+                );
+            } else {
+                acquired = lock.tryLock(
+                        distributedLock.waitTime(),
+                        distributedLock.leaseTime(),
+                        distributedLock.timeUnit()
+                );
+            }
             if (!acquired) {
                 throw new ServiceException(ErrorCode.LOCK_ACQUISITION_FAILED,
                         "잠시 후 다시 시도해주세요.");
@@ -49,6 +59,7 @@ public class DistributedLockAspect {
         } finally {
             if (acquired && lock.isHeldByCurrentThread()) {
                 lock.unlock();
+                log.info("락 해제: key={}", "lock:" + key);
             }
         }
     }

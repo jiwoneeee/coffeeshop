@@ -3,6 +3,7 @@ package com.example.coffeeshop.domain.member.service;
 import com.example.coffeeshop.common.annotation.DistributedLock;
 import com.example.coffeeshop.common.exception.ErrorCode;
 import com.example.coffeeshop.common.exception.ServiceException;
+import com.example.coffeeshop.domain.member.dto.MemberDto;
 import com.example.coffeeshop.domain.member.entity.Member;
 import com.example.coffeeshop.domain.member.entity.PointHistory;
 import com.example.coffeeshop.domain.member.entity.PointType;
@@ -73,5 +74,9 @@ public class PointService {
         return memberRepository.findById(memberId).orElseThrow(
                 ()-> new ServiceException(ErrorCode.MEMBER_NOT_FOUND)
         );
+    }
+
+    public MemberDto getMemberDto(Long memberId) {
+        return MemberDto.from(getMember(memberId));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.coffeeshop.domain.member.controller;
 
 import com.example.coffeeshop.common.dto.ApiResponse;
+import com.example.coffeeshop.domain.member.dto.MemberDto;
 import com.example.coffeeshop.domain.member.service.PointService;
 import com.example.coffeeshop.domain.member.dto.ChargePointRequest;
 import com.example.coffeeshop.domain.member.dto.ChargePointResponse;
@@ -26,6 +27,14 @@ public class PointController {
         return ResponseEntity.
                 status(HttpStatus.OK).
                 body(ApiResponse.success(pointService.charge(memberId, request)));
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<ApiResponse<MemberDto>> getMemberDto(
+            @PathVariable Long memberId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(pointService.getMemberDto(memberId)));
     }
 
 }

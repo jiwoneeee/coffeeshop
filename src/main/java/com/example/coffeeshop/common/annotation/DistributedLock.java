@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DistributedLock {
     String key();           // 락 키 (SpEL 지원)
+//    long timeOut() default 5;
     long waitTime() default 5;    // 락 대기 시간 (초)
     long leaseTime() default 3;   // 락 점유 시간 (초)
     TimeUnit timeUnit() default TimeUnit.SECONDS;
