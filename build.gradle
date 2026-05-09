@@ -40,6 +40,12 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // MetricsConsumer에서 Micrometer 쓰려면 추가
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Prometheus 연결
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {

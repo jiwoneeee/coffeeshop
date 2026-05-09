@@ -17,13 +17,19 @@ public class PointLockService {
         return pointService.charge(memberId, request);
     }
 
-    @DistributedLock(key = "'point:' + #memberId")
-    public void usePoint(Long memberId, Long amount) {
-        pointService.usePoint(memberId, amount);
-    }
+//    @DistributedLock(key = "'point:' + #memberId")
+//    public void usePoint(Long memberId, Long amount) {
+//        pointService.usePoint(memberId, amount);
+//    }
+//
+//    @DistributedLock(key = "'point:' + #memberId")
+//    public void earnPoint(Long memberId, Long amount) {
+//        pointService.earnPoint(memberId, amount);
+//    }
 
     @DistributedLock(key = "'point:' + #memberId")
-    public void earnPoint(Long memberId, Long amount) {
+    public void calAndSavePoint(Long memberId, Long amount) {
+        pointService.usePoint(memberId, amount);
         pointService.earnPoint(memberId, amount);
     }
 
