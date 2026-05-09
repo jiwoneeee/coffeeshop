@@ -5,7 +5,7 @@ spring:
     password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      maximum-pool-size: 40
+      maximum-pool-size: 60
       connection-timeout: 50000
       leak-detection-threshold: 5000
   jpa:
@@ -23,4 +23,12 @@ spring:
       port: 6379
       host: localhost
   kafka:
-    bootstrap-servers: localhost:9092,localhost:9093
+    bootstrap-servers: localhost:9092, localhost:9093
+    consumer:
+      properties:
+        spring.json.trusted.packages: "*"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health
