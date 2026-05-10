@@ -3,6 +3,7 @@ package com.example.coffeeshop.domain.order.controller;
 import com.example.coffeeshop.common.dto.ApiResponse;
 import com.example.coffeeshop.domain.order.dto.CreateOrderRequest;
 import com.example.coffeeshop.domain.order.dto.CreateOrderResponse;
+import com.example.coffeeshop.domain.order.entity.CancelReason;
 import com.example.coffeeshop.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class OrderController {
 
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<ApiResponse<String>> cancel(@PathVariable Long orderId){
-        orderService.cancel(orderId);
+        orderService.cancel(orderId, CancelReason.USER_CANCEL);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success("취소 성공"));
