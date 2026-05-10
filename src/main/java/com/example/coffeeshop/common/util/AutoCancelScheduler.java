@@ -28,6 +28,7 @@ public class AutoCancelScheduler {
                 orderRepository.findExpiredOrders(
                         LocalDateTime.now().minusMinutes(10)
                 );
+        log.info("[AutoCancelScheduler] scheduling 시작, 확인 건수: {}", expiredOrderIds.size());
 
         for (Long orderId : expiredOrderIds) {
             try {
