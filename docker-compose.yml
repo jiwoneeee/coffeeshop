@@ -142,6 +142,8 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
     networks:
@@ -152,6 +154,7 @@ volumes:
   kafka2_data:
   kafka3_data:
   redis_data:
+  grafana_data:
 
 networks:
   kafka-net:
