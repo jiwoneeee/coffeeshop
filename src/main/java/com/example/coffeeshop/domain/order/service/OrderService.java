@@ -88,7 +88,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void cancel(Long orderId) {
+    public void cancel(Long orderId, CancelReason reason) {
         Order order = findById(orderId);
 
         List<OrderItem> items = orderItemRepository.findAllByOrderId(orderId);
@@ -96,14 +96,14 @@ public class OrderService {
                 stockService.restore(item.getMenuId(), item.getQuantity())
         );
 
-        order.cancelled(CancelReason.USER_CANCEL);
+        order.cancelled(reason);
 
         paymentEventProducer.send(
                 PaymentEvent.cancelled(
                         order.getId(),
                         order.getMemberId(),
                         order.getTotalPrice(),
-                        CancelReason.USER_CANCEL.name()
+                        reason.name()
                 )
         );
     }
