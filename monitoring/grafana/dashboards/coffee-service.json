@@ -1,0 +1,467 @@
+{
+    "annotations": {
+    "list": [
+        {
+            "builtIn": 1,
+            "datasource": {
+                "type": "grafana",
+                "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+        }
+    ]
+},
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "liveNow": false,
+    "panels": [
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": { "mode": "palette-classic" },
+                "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": { "type": "linear" },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": { "group": "A", "mode": "none" },
+                    "thresholdsStyle": { "mode": "off" }
+                },
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        { "color": "green", "value": 0 },
+                        { "color": "red", "value": 80 }
+                    ]
+                }
+            }
+        },
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "id": 1,
+        "options": {
+            "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+            "tooltip": { "hideZeros": false, "mode": "single", "sort": "none" }
+        },
+        "targets": [
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "rate(http_server_requests_seconds_count{uri!=\"/actuator/prometheus\"}[1m])",
+                "legendFormat": "{{method}} {{uri}} {{status}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "초당 요청 수 (prometheus 제외)",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": { "mode": "palette-classic" },
+                "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": { "type": "linear" },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": { "group": "A", "mode": "none" },
+                    "thresholdsStyle": { "mode": "off" }
+                },
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        { "color": "green", "value": 0 },
+                        { "color": "red", "value": 80 }
+                    ]
+                },
+                "unit": "s"
+            }
+        },
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "id": 2,
+        "options": {
+            "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+            "tooltip": { "hideZeros": false, "mode": "single", "sort": "none" }
+        },
+        "targets": [
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "rate(http_server_requests_seconds_sum{uri!=\"/actuator/prometheus\"}[1m]) / rate(http_server_requests_seconds_count{uri!=\"/actuator/prometheus\"}[1m])",
+                "legendFormat": "{{method}} {{uri}} {{status}}",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "평균 응답 시간",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": { "mode": "palette-classic" },
+                "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": { "type": "linear" },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": { "group": "A", "mode": "normal" },
+                    "thresholdsStyle": { "mode": "off" }
+                },
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        { "color": "green", "value": 0 },
+                        { "color": "red", "value": 80 }
+                    ]
+                },
+                "unit": "bytes"
+            }
+        },
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+        "id": 3,
+        "options": {
+            "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+            "tooltip": { "hideZeros": false, "mode": "single", "sort": "none" }
+        },
+        "targets": [
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "jvm_memory_used_bytes{area=\"heap\"}",
+                "legendFormat": "{{id}}",
+                "range": true,
+                "refId": "A"
+            },
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "sum(jvm_memory_used_bytes{area=\"heap\"})",
+                "legendFormat": "sum",
+                "range": true,
+                "refId": "B"
+            }
+        ],
+        "title": "JVM 힙 메모리 사용량",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": { "mode": "palette-classic" },
+                "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": { "type": "linear" },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": { "group": "A", "mode": "none" },
+                    "thresholdsStyle": { "mode": "off" }
+                },
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        { "color": "green", "value": 0 },
+                        { "color": "red", "value": 80 }
+                    ]
+                }
+            }
+        },
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+        "id": 4,
+        "options": {
+            "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+            "tooltip": { "hideZeros": false, "mode": "single", "sort": "none" }
+        },
+        "targets": [
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "hikaricp_connections_active",
+                "legendFormat": "실행중인 커넥션 수",
+                "range": true,
+                "refId": "A"
+            },
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "hikaricp_connections_idle",
+                "legendFormat": "놀고있는 커넥션 수",
+                "range": true,
+                "refId": "B"
+            },
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "hikaricp_connections_pending",
+                "legendFormat": "커넥션을 못 받은 요청 수",
+                "range": true,
+                "refId": "C"
+            }
+        ],
+        "title": "HikariCP 활성 커넥션 수",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": { "mode": "palette-classic" },
+                "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": { "type": "linear" },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": { "group": "A", "mode": "none" },
+                    "thresholdsStyle": { "mode": "off" }
+                },
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        { "color": "green", "value": 0 },
+                        { "color": "red", "value": 80 }
+                    ]
+                }
+            }
+        },
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+        "id": 5,
+        "options": {
+            "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+            "tooltip": { "hideZeros": false, "mode": "single", "sort": "none" }
+        },
+        "targets": [
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "rate(payment_success_count_total[5m])",
+                "legendFormat": "결제 성공 처리량",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "결제 성공 초당 처리량",
+        "type": "timeseries"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": { "mode": "palette-classic" },
+                "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                        { "color": "green", "value": 0 },
+                        { "color": "red", "value": 80 }
+                    ]
+                },
+                "unit": "s"
+            }
+        },
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+        "id": 6,
+        "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+                "calcs": ["lastNotNull"],
+                "fields": "",
+                "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "auto",
+            "wideLayout": true
+        },
+        "targets": [
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "expr": "rate(payment_duration_seconds_sum[5m]) / rate(payment_duration_seconds_count[5m])",
+                "legendFormat": "평균 결제 소요시간",
+                "range": true,
+                "refId": "A"
+            }
+        ],
+        "title": "평균 결제 소요 시간",
+        "type": "stat"
+    },
+    {
+        "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+            "defaults": {
+                "color": { "mode": "palette-classic" },
+                "custom": {
+                    "hideFrom": { "legend": false, "tooltip": false, "viz": false }
+                }
+            }
+        },
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 },
+        "id": 7,
+        "options": {
+            "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+            "pieType": "donut",
+            "reduceOptions": {
+                "calcs": ["lastNotNull"],
+                "fields": "",
+                "values": false
+            },
+            "sort": "desc",
+            "tooltip": { "hideZeros": false, "mode": "single", "sort": "none" }
+        },
+        "targets": [
+            {
+                "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+                "editorMode": "code",
+                "exemplar": false,
+                "expr": "payment_cancel_count_total",
+                "instant": true,
+                "legendFormat": "{{reason}}",
+                "range": false,
+                "refId": "A"
+            }
+        ],
+        "title": "취소 사유별 건수",
+        "type": "piechart"
+    }
+],
+    "preload": false,
+    "refresh": "",
+    "schemaVersion": 42,
+    "templating": {
+    "list": [
+        {
+            "current": {
+                "selected": false,
+                "text": "Prometheus",
+                "value": "prometheus"
+            },
+            "hide": 2,
+            "includeAll": false,
+            "name": "DS_PROMETHEUS",
+            "options": [],
+            "query": "prometheus",
+            "refresh": 1,
+            "regex": "",
+            "type": "datasource"
+        }
+    ]
+},
+    "time": {
+    "from": "now-6h",
+        "to": "now"
+},
+    "timepicker": {
+    "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+},
+    "timezone": "browser",
+    "title": "coffeeshop",
+    "uid": "coffeeshop-dashboard",
+    "version": 1
+}

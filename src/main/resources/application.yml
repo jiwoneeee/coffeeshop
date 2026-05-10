@@ -31,4 +31,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: metrics, health
+        include: metrics, health, prometheus, info
+  metrics:
+    tags:
+      application: coffee-service

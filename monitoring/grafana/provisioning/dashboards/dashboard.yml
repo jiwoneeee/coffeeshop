@@ -1,0 +1,9 @@
+# monitoring/grafana/provisioning/dashboards/dashboard.yml
+apiVersion: 1
+
+providers:
+  - name: 'default'
+    folder: 'Coffee Service'
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards
