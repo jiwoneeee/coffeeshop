@@ -20,7 +20,8 @@ public class MetricsConsumer {
 
     private final Timer paymentDurationTimer;
     private final Counter paymentSuccessCounter;
-    private final Counter paymentCancelCounter;
+
+    private final MeterRegistry meterRegistry;
 
     //consumer별 처리 건수 count
     private final AtomicLong processedCount = new AtomicLong(0);
@@ -29,15 +30,14 @@ public class MetricsConsumer {
     public MetricsConsumer(MeterRegistry meterRegistry) {
         this.paymentDurationTimer = Timer.builder("payment.duration")
                 .description("주문 생성 → 결제 완료 소요시간")
+                .publishPercentileHistogram() // 95percentile 등을 확인 가능
                 .register(meterRegistry);
 
         this.paymentSuccessCounter = Counter.builder("payment.success.count")
                 .description("결제 성공 횟수")
                 .register(meterRegistry);
 
-        this.paymentCancelCounter = Counter.builder("payment.cancel.count")
-                .description("결제 취소 횟수")
-                .register(meterRegistry);
+        this.meterRegistry = meterRegistry;
     }
 
     @KafkaListener(topics = TOPIC,  groupId = "metrics-group")
@@ -56,7 +56,11 @@ public class MetricsConsumer {
                 }
             }
             case "PAYMENT_CANCELLED" -> {
-                paymentCancelCounter.increment();
+                Counter.builder("payment.cancel.count")
+                        .description("결제 취소 횟수")
+                        .tag("reason", event.cancelReason())   // "TIMEOUT", "USER_CANCEL" 등
+                        .register(meterRegistry)
+                        .increment();
 
                 log.info("[metrics] 결제 취소 - orderId: {}, 사유: {}",
                         event.orderId(), event.cancelReason());
