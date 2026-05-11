@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -104,6 +105,12 @@ public class OrderService {
     public Order findById(Long orderId){
         return orderRepository.findById(orderId).orElseThrow(
                 () -> new ServiceException(ErrorCode.ORDER_NOT_FOUND)
+        );
+    }
+
+    public List<Long> getExpiredOrderIds(LocalDateTime expiredBefore){
+        return orderRepository.findExpiredOrders(
+                expiredBefore
         );
     }
 }
