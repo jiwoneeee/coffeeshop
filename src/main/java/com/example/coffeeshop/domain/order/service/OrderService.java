@@ -32,7 +32,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
-    private final PaymentEventListener paymentEventListener;
     private final ApplicationEventPublisher eventPublisher;
 
 
@@ -53,7 +52,6 @@ public class OrderService {
             );
 
             totalPrice += menu.getPrice() * item.quantity();
-//            log.info("[OrderService] totalPrice: {}", totalPrice);
         }
 
         if (member.getPoint() < totalPrice) {
