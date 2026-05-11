@@ -28,7 +28,7 @@ public class PointLockService {
 //    }
 
     @DistributedLock(key = "'point:' + #memberId")
-    public void calAndSavePoint(Long memberId, Long amount) {
+    public void useAndEarnPoint(Long memberId, Long amount) {
         pointService.usePoint(memberId, amount);
         pointService.earnPoint(memberId, amount);
     }

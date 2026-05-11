@@ -91,6 +91,22 @@ services:
       - kafka-net
 
   # --------------------------
+  # MySQL
+  # --------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: coffee
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - kafka-net
+
+  # --------------------------
   # Redis
   # --------------------------
   redis:
@@ -157,6 +173,7 @@ volumes:
   kafka3_data:
   redis_data:
   grafana_data:
+  mysql_data:
 
 networks:
   kafka-net:

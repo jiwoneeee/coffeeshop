@@ -5,6 +5,7 @@ import com.example.coffeeshop.domain.order.dto.CreateOrderRequest;
 import com.example.coffeeshop.domain.order.dto.CreateOrderResponse;
 import com.example.coffeeshop.domain.order.entity.CancelReason;
 import com.example.coffeeshop.domain.order.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CreateOrderResponse>> order(@RequestBody CreateOrderRequest request){
+    public ResponseEntity<ApiResponse<CreateOrderResponse>> order(@Valid @RequestBody CreateOrderRequest request){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ApiResponse.success(orderService.order(request)));

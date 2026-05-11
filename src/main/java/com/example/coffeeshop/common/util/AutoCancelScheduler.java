@@ -19,15 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class AutoCancelScheduler {
-    private final OrderRepository orderRepository;
     private final OrderService orderService;
 
     @Scheduled(cron = "0 * * * * *")
     public void orderExpire(){
-        List<Long> expiredOrderIds =
-                orderRepository.findExpiredOrders(
-                        LocalDateTime.now().minusMinutes(10)
-                );
+        List<Long> expiredOrderIds = orderService.getExpiredOrderIds(
+                LocalDateTime.now().minusMinutes(10));
         log.info("[AutoCancelScheduler] scheduling 시작, 확인 건수: {}", expiredOrderIds.size());
 
         for (Long orderId : expiredOrderIds) {

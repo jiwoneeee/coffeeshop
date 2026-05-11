@@ -5,6 +5,7 @@ import com.example.coffeeshop.domain.member.dto.MemberDto;
 import com.example.coffeeshop.domain.member.dto.ChargePointRequest;
 import com.example.coffeeshop.domain.member.dto.ChargePointResponse;
 import com.example.coffeeshop.domain.member.service.PointLockService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class PointController {
     @PostMapping("/charge/{memberId}")
     public ResponseEntity<ApiResponse<ChargePointResponse>> charge(
             @PathVariable Long memberId,
-            @RequestBody ChargePointRequest request){
+            @Valid @RequestBody ChargePointRequest request){
         return ResponseEntity.
                 status(HttpStatus.OK).
                 body(ApiResponse.success(pointService.charge(memberId, request)));

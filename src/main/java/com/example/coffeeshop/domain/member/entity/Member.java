@@ -31,7 +31,7 @@ public class Member {
 
     public Member(String name) {
         this.name = name;
-        this.point = 1_000_000L;
+        this.point = 100_000L;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
