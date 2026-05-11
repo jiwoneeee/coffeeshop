@@ -6,7 +6,6 @@ import com.example.coffeeshop.domain.member.entity.Member;
 import com.example.coffeeshop.domain.member.repository.MemberRepository;
 import com.example.coffeeshop.domain.member.service.PointLockService;
 import com.example.coffeeshop.domain.menu.entity.Menu;
-import com.example.coffeeshop.domain.menu.service.MenuRankingService;
 import com.example.coffeeshop.domain.order.dto.*;
 import com.example.coffeeshop.domain.order.entity.CancelReason;
 import com.example.coffeeshop.domain.order.entity.Order;
@@ -16,16 +15,10 @@ import com.example.coffeeshop.domain.order.repository.OrderItemRepository;
 import com.example.coffeeshop.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -33,7 +26,7 @@ import java.util.Map;
 @Slf4j
 public class OrderService {
     private final PointLockService pointService;
-    private final StockLockService stockService;
+    private final StockLockService stockLockService;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
@@ -49,7 +42,7 @@ public class OrderService {
         long totalPrice = 0L;
 
         for (OrderItemDto item : request.items()) {
-            Menu menu = stockService.decrease(item.menuId(), item.quantity());
+            Menu menu = stockLockService.decrease(item.menuId(), item.quantity());
 
             orderItemRepository.save(
                     new OrderItem(order.getId(), menu.getId(), item.quantity(), menu.getPrice())
@@ -73,7 +66,7 @@ public class OrderService {
 
 //        pointService.usePoint(order.getMemberId(), order.getTotalPrice());
 //        pointService.earnPoint(order.getMemberId(), order.getTotalPrice());
-        pointService.calAndSavePoint(order.getMemberId(), order.getTotalPrice());
+        pointService.useAndEarnPoint(order.getMemberId(), order.getTotalPrice());
 
         order.paid();
 
@@ -93,7 +86,7 @@ public class OrderService {
 
         List<OrderItem> items = orderItemRepository.findAllByOrderId(orderId);
         items.forEach(item ->
-                stockService.restore(item.getMenuId(), item.getQuantity())
+                stockLockService.restore(item.getMenuId(), item.getQuantity())
         );
 
         order.cancelled(reason);
