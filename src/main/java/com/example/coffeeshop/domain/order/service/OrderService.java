@@ -64,9 +64,15 @@ public class OrderService {
     @Transactional
     public void pay(Long orderId) {
         Order order = findById(orderId);
+        Member member = memberRepository.findById(order.getMemberId()).orElseThrow(
+                ()-> new ServiceException(ErrorCode.MEMBER_NOT_FOUND)
+        );
 
-//        pointService.usePoint(order.getMemberId(), order.getTotalPrice());
-//        pointService.earnPoint(order.getMemberId(), order.getTotalPrice());
+        if (member.getPoint() < order.getTotalPrice()) {
+            throw new ServiceException(ErrorCode.SHORT_POINT,
+                    "잔액이 부족합니다. 현재 잔액: " + member.getPoint());
+        }
+
         pointService.useAndEarnPoint(order.getMemberId(), order.getTotalPrice());
 
         order.paid();
