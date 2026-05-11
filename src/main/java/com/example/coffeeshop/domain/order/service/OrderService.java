@@ -10,11 +10,12 @@ import com.example.coffeeshop.domain.order.dto.*;
 import com.example.coffeeshop.domain.order.entity.CancelReason;
 import com.example.coffeeshop.domain.order.entity.Order;
 import com.example.coffeeshop.domain.order.entity.OrderItem;
-import com.example.coffeeshop.domain.order.producer.PaymentEventProducer;
+import com.example.coffeeshop.domain.order.producer.PaymentEventListener;
 import com.example.coffeeshop.domain.order.repository.OrderItemRepository;
 import com.example.coffeeshop.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,9 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
-    private final PaymentEventProducer paymentEventProducer;
+    private final PaymentEventListener paymentEventListener;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     @Transactional
     public CreateOrderResponse order(CreateOrderRequest request) {
@@ -77,7 +80,7 @@ public class OrderService {
 
         order.paid();
 
-        paymentEventProducer.send(
+        eventPublisher.publishEvent(
                 PaymentEvent.completed(
                         order.getId(),
                         order.getMemberId(),
@@ -98,12 +101,12 @@ public class OrderService {
 
         order.cancelled(reason);
 
-        paymentEventProducer.send(
+        eventPublisher.publishEvent(
                 PaymentEvent.cancelled(
                         order.getId(),
                         order.getMemberId(),
                         order.getTotalPrice(),
-                        reason.name()
+                        order.getCancelReason().name()
                 )
         );
     }
