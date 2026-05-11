@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,24 +39,33 @@ public class OrderService {
     @Transactional
     public CreateOrderResponse order(CreateOrderRequest request) {
         Member member = memberRepository.findById(request.memberId()).orElseThrow(
-                ()-> new ServiceException(ErrorCode.MEMBER_NOT_FOUND)
+                () -> new ServiceException(ErrorCode.MEMBER_NOT_FOUND)
         );
         Order order = orderRepository.save(new Order(request.memberId()));
 
         long totalPrice = 0L;
+        List<OrderItemDto> decreasedItems = new ArrayList<>();
 
-        for (OrderItemDto item : request.items()) {
-            Menu menu = stockLockService.decrease(item.menuId(), item.quantity());
+        try {
+            for (OrderItemDto item : request.items()) {
+                Menu menu = stockLockService.decrease(item.menuId(), item.quantity());
+                decreasedItems.add(item);
 
-            orderItemRepository.save(
-                    new OrderItem(order.getId(), menu.getId(), item.quantity(), menu.getPrice())
-            );
+                orderItemRepository.save(
+                        new OrderItem(order.getId(), menu.getId(), item.quantity(), menu.getPrice())
+                );
+                totalPrice += menu.getPrice() * item.quantity();
+            }
 
-            totalPrice += menu.getPrice() * item.quantity();
-        }
-
-        if (member.getPoint() < totalPrice) {
-            throw new ServiceException(ErrorCode.SHORT_POINT, "잔액이 부족합니다. 현재 잔액: "+member.getPoint());
+            if (member.getPoint() < totalPrice) {
+                throw new ServiceException(ErrorCode.SHORT_POINT,
+                        "잔액이 부족합니다. 현재 잔액: " + member.getPoint());
+            }
+        } catch (Exception e) {
+            for (OrderItemDto item : decreasedItems) {
+                stockLockService.restore(item.menuId(), item.quantity());
+            }
+            throw e;
         }
 
         order.updateTotalPrice(totalPrice);
