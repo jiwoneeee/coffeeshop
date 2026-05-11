@@ -12,9 +12,11 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 @Configuration
 public class RedisConfig {
 
-    private static final String HOST = "localhost";
+    @Value("${spring.data.redis.host}")
+    private String HOST;
 
-    private static final int PORT = 6379;
+    @Value("${spring.data.redis.port}")
+    private int PORT = 6379;
 
     // Lettuce ConnectionFactory를 직접 등록
     @Bean
