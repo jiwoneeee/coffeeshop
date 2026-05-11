@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import static com.example.coffeeshop.common.config.kafka.KafkaConfig.TOPIC;
+import static com.example.coffeeshop.common.config.kafka.KafkaTopic.TOPIC;
 
 @Slf4j
 @Component
