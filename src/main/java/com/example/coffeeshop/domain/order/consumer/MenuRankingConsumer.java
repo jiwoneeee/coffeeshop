@@ -34,6 +34,7 @@ public class MenuRankingConsumer {
         if (!event.type().equals("PAYMENT_COMPLETED")) return;
 
         List<OrderItem> itemList = orderItemRepository.findAllByOrderId(event.orderId());
+        log.info("[menu-ranking] 결제 성공 - 수량만큼 Count 된 menu 개수: {}", itemList.size());
 
         for (OrderItem i : itemList){
             menuRankingService.count(i.getMenuId(), i.getQuantity(), LocalDate.from(event.orderedAt()));
