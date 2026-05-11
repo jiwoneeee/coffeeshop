@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.example.coffeeshop.common.config.kafka.KafkaConfig.TOPIC;
+import static com.example.coffeeshop.common.config.kafka.KafkaTopic.TOPIC;
 
 @Component
 @RequiredArgsConstructor

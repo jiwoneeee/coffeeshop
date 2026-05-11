@@ -4,7 +4,6 @@ import com.example.coffeeshop.domain.order.dto.PaymentEvent;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.example.coffeeshop.common.config.kafka.KafkaConfig.TOPIC;
+import static com.example.coffeeshop.common.config.kafka.KafkaTopic.TOPIC;
 
 @Slf4j
 @Component

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.example.coffeeshop.common.config.kafka.KafkaConfig.TOPIC;
+import static com.example.coffeeshop.common.config.kafka.KafkaTopic.TOPIC;
 
 @Slf4j
 @Component
