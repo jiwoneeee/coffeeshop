@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 public class StockLockService {
     private final StockService stockService;
 
-    @DistributedLock(key = "'stock:' + #menuId", waitTime = 10, leaseTime = -1)
+    @DistributedLock(key = "'stock:' + #menuId", waitTime = 10, leaseTime = 30)
     public Menu decrease(Long menuId, int quantity) {
         return stockService.decrease(menuId, quantity);
     }
 
-    @DistributedLock(key = "'stock:' + #menuId", waitTime = 10, leaseTime = -1)
+    @DistributedLock(key = "'stock:' + #menuId", waitTime = 10, leaseTime = 30)
     public void restore(Long menuId, int quantity) {
         stockService.restore(menuId, quantity);
     }
