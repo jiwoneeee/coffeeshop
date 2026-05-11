@@ -27,6 +27,9 @@ spring:
     consumer:
       properties:
         spring.json.trusted.packages: "*"
+  sql:
+    init:
+      mode: always
 management:
   endpoints:
     web:

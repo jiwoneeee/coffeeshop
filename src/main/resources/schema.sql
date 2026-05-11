@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS idx_orders_status_ordered_at ON orders (status, ordered_at);
